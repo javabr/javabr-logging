@@ -17,3 +17,6 @@ Add this dependency to your application pom.xml
 <version>1.0.0-SNAPSHOT</version>
 <classifier>mule-plugin</classifier>
 ```
+=======
+A Logging Framework for Mulesoft Application
+
