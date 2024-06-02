@@ -4,9 +4,11 @@
 
 1. Replace groupId ORGANIZATION_ID by your organization id.
 From:
+
 <img width="358" alt="image" src="https://github.com/javabr/javabr-logging/assets/1243385/384febc6-7972-4c8b-b545-a25f2ba12003">
 
 To something like:
+
 <img width="494" alt="image" src="https://github.com/javabr/javabr-logging/assets/1243385/41ec9ada-bb99-405b-8906-c2014d2b3d2e">
      
 
