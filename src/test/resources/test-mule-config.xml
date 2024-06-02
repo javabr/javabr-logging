@@ -1,0 +1,45 @@
+<mule xmlns="http://www.mulesoft.org/schema/mule/core"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:javabr-logging="http://www.mulesoft.org/schema/mule/javabr-logging"
+  xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+          http://www.mulesoft.org/schema/mule/javabr-logging http://www.mulesoft.org/schema/mule/javabr-logging/current/mule-javabr-logging.xsd">
+
+  <javabr-logging:config name="Javabr_logging_Config"
+    configId="123123">
+    <javabr-logging:connection artifactId="test"
+      applicationName="test-application-dev"
+      muleEnvironmentName="Development" />
+  </javabr-logging:config>
+
+  <flow name="testFlowNullContent">
+    <javabr-logging:log config-ref="Javabr_logging_Config"
+      message="null content message"/>
+  </flow>
+
+  <flow name="testFlowJSONContent">
+    <javabr-logging:log config-ref="Javabr_logging_Config"
+      message="JSON content message"
+      content="#[%dw 2.0
+        output application/json --- 
+        { something: {} }]"/>
+  </flow>
+
+  <flow name="testFlowJSONContentWithPayload">
+    <set-payload value="#['the payload is ' ++ (10+10)]" />
+    <javabr-logging:log config-ref="Javabr_logging_Config"
+      message="JSON content message with payload"
+      content="#[%dw 2.0
+        output application/json --- 
+        { something: payload }]"/>
+  </flow>
+
+  <flow name="testFlowJavaContentWithPayload">
+    <set-payload value="#['the payload is ' ++ (10+10)]" />
+    <javabr-logging:log config-ref="Javabr_logging_Config"
+      message="JSON content message with payload"
+      content="#[%dw 2.0
+        output application/java --- 
+        payload]"/>
+  </flow>
+
+</mule>
