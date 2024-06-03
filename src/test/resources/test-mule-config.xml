@@ -5,11 +5,9 @@
           http://www.mulesoft.org/schema/mule/javabr-logging http://www.mulesoft.org/schema/mule/javabr-logging/current/mule-javabr-logging.xsd">
 
   <javabr-logging:config name="Javabr_logging_Config"
-    configId="123123">
-    <javabr-logging:connection artifactId="test"
-      applicationName="test-application-dev"
-      muleEnvironmentName="Development" />
-  </javabr-logging:config>
+    artifactId="test"
+    applicationName="test-application-dev"
+    muleEnvironmentName="Development" />
 
   <flow name="testFlowNullContent">
     <javabr-logging:log config-ref="Javabr_logging_Config"

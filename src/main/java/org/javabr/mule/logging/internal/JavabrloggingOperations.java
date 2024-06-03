@@ -8,18 +8,22 @@ import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
+import static org.javabr.mule.logging.api.dao.Level.*;
+
 import org.mule.runtime.extension.api.annotation.param.MediaType;
 import org.mule.runtime.extension.api.annotation.param.ParameterGroup;
 import org.mule.runtime.extension.api.runtime.parameter.ParameterResolver;
-import org.mule.runtime.module.artifact.api.classloader.MuleArtifactClassLoader;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import static org.mule.runtime.api.metadata.DataType.TEXT_STRING;
 
+import org.javabr.mule.logging.api.dao.LogBody;
+import org.mule.runtime.api.meta.model.operation.ExecutionType;
 import org.mule.runtime.api.metadata.TypedValue;
 import org.mule.runtime.api.transformation.TransformationService;
+import org.mule.runtime.extension.api.annotation.execution.Execution;
 import org.mule.runtime.extension.api.annotation.param.Config;
 import org.mule.runtime.extension.api.annotation.param.Connection;
 import org.mule.runtime.extension.api.annotation.param.Content;
@@ -37,43 +41,46 @@ public class JavabrloggingOperations {
   /**
    * 
    */
+  @Execution(ExecutionType.BLOCKING)
   @MediaType(value = ANY, strict = false)
   public void log(@ParameterGroup(name = "Log") @Content LogBody logBody,
-      @Config JavabrloggingConfiguration configuration,
-      @Connection JavabrloggingConnection connection) {
+      @Config JavabrloggingConfiguration configuration) {
     LOGGER.log(Level.FINER, "Starting log operation");
-    if (!isLogable(logBody.getLevel(), connection.getLogger()))
+
+    // If not logable, stops here and saves some processing time.
+    if (!isLogable(logBody.getLevel(), configuration.getLogConfig().getLogger()))
       return;
+
     LOGGER.log(Level.FINER, "Logging log level %s", logBody.getLevel());
-    logBody.setEnvironment(connection.getEnvironment());
-    logBody.setTimestamp(connection.currentDatetime()); // MuleArtifactClassLoader
-
-    logBody.setApplication(connection.getApplication());
-
+    logBody.setEnvironment(configuration.getLogConfig().getMuleEnvironmentName());
+    logBody.setTimestamp(configuration.currentDatetime());
+    logBody.setApplication(configuration.getLogConfig().getApplicationName());
     try {
-      ObjectNode finalLog = connection.getMapper().createObjectNode();
-      finalLog.setAll((ObjectNode) connection.getMapper().valueToTree(logBody));
+      ObjectNode finalLog = configuration.getMapper().createObjectNode();
+      finalLog.setAll((ObjectNode) configuration.getMapper().valueToTree(logBody));
       finalLog.remove("content");
       if (logBody.getContent() != null) {
         String content = parseField(logBody.getContent());
-        finalLog.put("content", content);
+        if (content != null && !content.equals("")) {
+          finalLog.put("content", content);
+        }
       }
-      String logStatement = connection.getMapper().writerWithDefaultPrettyPrinter().writeValueAsString(finalLog);
+      String logStatement = configuration.getMapper().writerWithDefaultPrettyPrinter().writeValueAsString(finalLog);
       switch (logBody.getLevel()) {
         case TRACE:
-          connection.getLogger().log(Level.FINEST, logStatement);
+          configuration.getLogConfig().getLogger().log(Level.FINEST, logStatement);
           break;
         case DEBUG:
-          connection.getLogger().log(Level.FINER, logStatement);
+          configuration.getLogConfig().getLogger().log(Level.FINER, logStatement);
           break;
         case INFO:
-          connection.getLogger().log(Level.INFO, logStatement);
+          configuration.getLogConfig().getLogger().log(Level.INFO, logStatement);
           break;
         case WARN:
-          connection.getLogger().log(Level.WARNING, logStatement);
+          configuration.getLogConfig().getLogger().log(Level.WARNING, logStatement);
           break;
         case ERROR:
-          connection.getLogger().log(Level.SEVERE, logStatement);
+          configuration.getLogConfig().getLogger().log(Level.SEVERE, logStatement);
           break;
         default:
           break;
@@ -83,7 +90,7 @@ public class JavabrloggingOperations {
     }
   }
 
-  private Boolean isLogable(org.javabr.mule.logging.internal.Level level, Logger logger) {
+  private Boolean isLogable(org.javabr.mule.logging.api.dao.Level level, Logger logger) {
     switch (level) {
       case TRACE:
         return logger.isLoggable(Level.FINEST);
