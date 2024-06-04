@@ -63,7 +63,7 @@ Example:
 
 ```
      <javabr-logging:config 	name="Javabr_logging_Config"
-       artifactId="test" applicationName="${app.name}"
+       artifactId="test-process" applicationName="${app.name}"
        muleEnvironmentName="${mule.env}" />
 ```
 
