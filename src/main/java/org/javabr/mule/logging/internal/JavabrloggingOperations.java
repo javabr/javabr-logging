@@ -3,16 +3,17 @@ package org.javabr.mule.logging.internal;
 import static org.mule.runtime.extension.api.annotation.param.MediaType.ANY;
 
 import java.io.InputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
 import static org.javabr.mule.logging.api.dao.Level.*;
+import org.javabr.mule.logging.api.dao.Level;
 
 import org.mule.runtime.extension.api.annotation.param.MediaType;
 import org.mule.runtime.extension.api.annotation.param.ParameterGroup;
 import org.mule.runtime.extension.api.runtime.parameter.ParameterResolver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -25,7 +26,6 @@ import org.mule.runtime.api.metadata.TypedValue;
 import org.mule.runtime.api.transformation.TransformationService;
 import org.mule.runtime.extension.api.annotation.execution.Execution;
 import org.mule.runtime.extension.api.annotation.param.Config;
-import org.mule.runtime.extension.api.annotation.param.Connection;
 import org.mule.runtime.extension.api.annotation.param.Content;
 
 /**
@@ -36,7 +36,7 @@ public class JavabrloggingOperations {
   @Inject
   private TransformationService transformationService;
 
-  private final static Logger LOGGER = Logger.getLogger(JavabrloggingOperations.class.getName());
+  private final static Logger LOGGER = LoggerFactory.getLogger(JavabrloggingOperations.class.getName());
 
   /**
    * 
@@ -45,13 +45,13 @@ public class JavabrloggingOperations {
   @MediaType(value = ANY, strict = false)
   public void log(@ParameterGroup(name = "Log") @Content LogBody logBody,
       @Config JavabrloggingConfiguration configuration) {
-    LOGGER.log(Level.FINER, "Starting log operation");
+    LOGGER.debug("Starting log operation");
 
     // If not logable, stops here and saves some processing time.
     if (!isLogable(logBody.getLevel(), configuration.getLogConfig().getLogger()))
       return;
 
-    LOGGER.log(Level.FINER, "Logging log level %s", logBody.getLevel());
+    LOGGER.debug("Logging log level %s", logBody.getLevel());
     logBody.setEnvironment(configuration.getLogConfig().getMuleEnvironmentName());
     logBody.setTimestamp(configuration.currentDatetime());
     logBody.setApplication(configuration.getLogConfig().getApplicationName());
@@ -68,40 +68,40 @@ public class JavabrloggingOperations {
       String logStatement = configuration.getMapper().writerWithDefaultPrettyPrinter().writeValueAsString(finalLog);
       switch (logBody.getLevel()) {
         case TRACE:
-          configuration.getLogConfig().getLogger().log(Level.FINEST, logStatement);
+          configuration.getLogConfig().getLogger().trace(logStatement);
           break;
         case DEBUG:
-          configuration.getLogConfig().getLogger().log(Level.FINER, logStatement);
+          configuration.getLogConfig().getLogger().debug(logStatement);
           break;
         case INFO:
-          configuration.getLogConfig().getLogger().log(Level.INFO, logStatement);
+          configuration.getLogConfig().getLogger().info(logStatement);
           break;
         case WARN:
-          configuration.getLogConfig().getLogger().log(Level.WARNING, logStatement);
+          configuration.getLogConfig().getLogger().warn(logStatement);
           break;
         case ERROR:
-          configuration.getLogConfig().getLogger().log(Level.SEVERE, logStatement);
+          configuration.getLogConfig().getLogger().error(logStatement);
           break;
         default:
           break;
       }
     } catch (JsonProcessingException e) {
-      LOGGER.severe("Error Processing logging. Reson was " + e.getMessage());
+      LOGGER.error("Error Processing logging. Reson was " + e.getMessage());
     }
   }
 
-  private Boolean isLogable(org.javabr.mule.logging.api.dao.Level level, Logger logger) {
+  private Boolean isLogable(Level level, Logger logger) {
     switch (level) {
       case TRACE:
-        return logger.isLoggable(Level.FINEST);
+        return logger.isTraceEnabled();
       case DEBUG:
-        return logger.isLoggable(Level.FINE);
+        return logger.isDebugEnabled();
       case INFO:
-        return logger.isLoggable(Level.INFO);
+        return logger.isInfoEnabled();
       case WARN:
-        return logger.isLoggable(Level.WARNING);
+        return logger.isWarnEnabled();
       case ERROR:
-        return logger.isLoggable(Level.SEVERE);
+        return logger.isErrorEnabled();
     }
     return false;
   }

@@ -2,17 +2,13 @@ package org.javabr.mule.logging.internal;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.logging.Logger;
 
 import org.javabr.mule.logging.api.dao.LogConfig;
 import org.mule.runtime.api.meta.ExpressionSupport;
 import org.mule.runtime.extension.api.annotation.Expression;
 import org.mule.runtime.extension.api.annotation.Operations;
-import org.mule.runtime.extension.api.annotation.connectivity.ConnectionProviders;
-import org.mule.runtime.extension.api.annotation.param.Optional;
 import org.mule.runtime.extension.api.annotation.param.Parameter;
 import org.mule.runtime.extension.api.annotation.param.ParameterGroup;
-import org.mule.runtime.extension.api.annotation.param.display.DisplayName;
 import org.mule.runtime.extension.api.annotation.param.display.Placement;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -61,6 +57,6 @@ public class JavabrloggingConfiguration {
   }
 
   private DateFormat dataFormater = new SimpleDateFormat(
-      "yyyy-MM-dd HH:mm:ss:SSSZ");
+      "yyyy-MM-dd HH:mm:ss:SSS'Z'");
 
 }

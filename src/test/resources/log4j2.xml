@@ -24,7 +24,7 @@
       <AppenderRef ref="file"/>
     </AsyncLogger>
 
-    <AsyncLogger name="ztest"
+    <AsyncLogger name="test"
       level="TRACE">
       <AppenderRef ref="file"/>
     </AsyncLogger>

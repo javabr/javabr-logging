@@ -17,6 +17,7 @@
   <flow name="testFlowJSONContent">
     <javabr-logging:log config-ref="Javabr_logging_Config"
       message="JSON content message"
+      level="TRACE"
       content="#[%dw 2.0
         output application/json --- 
         { something: {} }]"/>

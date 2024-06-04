@@ -6,7 +6,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>31079ec9-f3b1-48ba-a05e-eb3d28ea3dfc</groupId>
   <artifactId>javabr-logging</artifactId>
-  <version>1.0.6</version>
+  <version>1.0.7</version>
 
   <packaging>mule-extension</packaging>
   <name>Javabr-logging Extension</name>

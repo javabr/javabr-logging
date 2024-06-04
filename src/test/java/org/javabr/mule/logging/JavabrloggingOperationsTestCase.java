@@ -24,6 +24,7 @@ public class JavabrloggingOperationsTestCase extends MuleArtifactFunctionalTestC
     assertNull(payloadValue);
   }
 
+  // testFlowJSONContent
   @Test
   public void executeLogOperationJSONContent() throws Exception {
     String payloadValue = ((String) flowRunner("testFlowJSONContent").run()

@@ -1,13 +1,13 @@
 package org.javabr.mule.logging.api.dao;
 
-import java.util.logging.Logger;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.mule.runtime.extension.api.annotation.param.Optional;
 import org.mule.runtime.extension.api.annotation.param.Parameter;
 import org.mule.runtime.extension.api.annotation.param.display.DisplayName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -67,7 +67,7 @@ public class LogConfig {
 
   public Logger getLogger() {
     if (LOGGER == null) {
-      LOGGER = Logger.getLogger(artifactId);
+      LOGGER = LoggerFactory.getLogger(artifactId);
     }
     return LOGGER;
   }
