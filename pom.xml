@@ -4,9 +4,9 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
-  <groupId>31079ec9-f3b1-48ba-a05e-eb3d28ea3dfc</groupId>
+  <groupId>ORGANIZATION_ID</groupId>
   <artifactId>javabr-logging</artifactId>
-  <version>1.0.7</version>
+  <version>1.0.0</version>
 
   <packaging>mule-extension</packaging>
   <name>Javabr-logging Extension</name>
