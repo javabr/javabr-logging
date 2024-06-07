@@ -29,7 +29,8 @@ import org.mule.runtime.extension.api.annotation.param.Config;
 import org.mule.runtime.extension.api.annotation.param.Content;
 
 /**
- * 
+ * This is the main entry point of this component.
+ * How to use it: https://github.com/javabr/javabr-logging
  */
 public class JavabrloggingOperations {
 
@@ -43,7 +44,7 @@ public class JavabrloggingOperations {
    */
   @Execution(ExecutionType.BLOCKING)
   @MediaType(value = ANY, strict = false)
-  public void log(@ParameterGroup(name = "Log") @Content LogBody logBody,
+  public void log(@ParameterGroup(name = "Log") LogBody logBody,
       @Config JavabrloggingConfiguration configuration) {
     LOGGER.debug("Starting log operation");
 
