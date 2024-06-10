@@ -22,6 +22,8 @@ Sample logging statement:
 
 ### Build & Install the Component in Your Exchange:
 
+Clone this repo and follow the instructions below.
+
 1. In the pom.xml, replace ORGANIZATION_ID with your own Mule organization ID.
 
 <img width="358" alt="image" src="https://github.com/javabr/javabr-logging/assets/1243385/384febc6-7972-4c8b-b545-a25f2ba12003">
